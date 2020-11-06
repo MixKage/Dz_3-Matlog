@@ -118,80 +118,94 @@ namespace DZ_3
             for (var i = 0; i < expression.Length; i++)
             {
                 var c = expression[i];
-                if (c == '-')
+                switch (c)
                 {
-                    if (expression[i + 1] == '(')
+                    case '-' when expression[i + 1] == '(':
                     {
                         var tempExpression = GetExpression(expression, ref i);
 
                         temp = Negation(Calc(tempExpression));
+                        break;
                     }
-                    else
-                    {
+                    case '-':
                         temp = Negation(Calc(expression[i + 1]));
                         i++;
-                    }
-                }
-                else if (c == '(')
-                {
-                    var tempExpression = GetExpression(expression, ref i);
-                    temp = Calc(tempExpression);
-                }
-                else if (c == '^')
-                {
-                    if (expression[i + 1] == '(')
+                        break;
+                    case '(':
                     {
-                        i++;
                         var tempExpression = GetExpression(expression, ref i);
-                        temp = Crossing(temp, Calc(tempExpression));
+                        temp = Calc(tempExpression);
+                        break;
                     }
-                    else if (expression[i + 1] == '-')
-                    {
-                        temp = Crossing(temp, Calc(expression.Substring(i + 1, 2)));
-                        i += 2;
-                    }
-                    else
-                    {
-                        temp = Crossing(temp, Calc(expression[i + 1]));
-                        i++;
-                    }
-                }
-                else if (c == 'v')
-                {
-                    if (expression[i + 1] == '(')
-                    {
-                        i++;
-                        var tempExpression = GetExpression(expression, ref i);
-                        temp = Union(temp, Calc(tempExpression));
-                    }
-                    else if (expression[i + 1] == '-')
-                    {
-                        temp = Union(temp, Calc(expression.Substring(i+1,2)));
-                        i+=2;
-                    }
-                    else
-                    {
-                        temp = Union(temp, Calc(expression[i + 1]));
-                        i++;
-                    }
-                }
-                else if (c == '\\')
-                {
-                    if (expression[i + 1] == '(')
-                    {
-                        i++;
-                        var tempExpression = GetExpression(expression, ref i);
-                        temp = Subtraction(temp, Calc(tempExpression));
-                    }
-                    else
-                    {
-                        temp = Subtraction(temp, Calc(expression[i + 1]));
-                        i++;
-                    }
-                }
-                else if (c == 'A' || c == 'B' || c == 'C' || c == 'D')
-                {
-                    temp = Calc(c);
+                    case '^':
+                        switch (expression[i + 1])
+                        {
+                            case '(':
+                            {
+                                i++;
+                                var tempExpression = GetExpression(expression, ref i);
+                                temp = Crossing(temp, Calc(tempExpression));
+                                break;
+                            }
+                            case '-':
+                                temp = Crossing(temp, Calc(expression.Substring(i + 1, 2)));
+                                i += 2;
+                                break;
+                            default:
+                                temp = Crossing(temp, Calc(expression[i + 1]));
+                                i++;
+                                break;
+                        }
+
+                        break;
+                    case 'v':
+                        switch (expression[i + 1])
+                        {
+                            case '(':
+                            {
+                                i++;
+                                var tempExpression = GetExpression(expression, ref i);
+                                temp = Union(temp, Calc(tempExpression));
+                                break;
+                            }
+                            case '-':
+                                temp = Union(temp, Calc(expression.Substring(i+1,2)));
+                                i+=2;
+                                break;
+                            default:
+                                temp = Union(temp, Calc(expression[i + 1]));
+                                i++;
+                                break;
+                        }
+
+                        break;
+                    case '\\':
+                        switch (expression[i + 1])
+                        {
+                            case '(':
+                            {
+                                i++;
+                                var tempExpression = GetExpression(expression, ref i);
+                                temp = Subtraction(temp, Calc(tempExpression));
+                                break;
+                            }
+                            case '-':
+                                temp = Subtraction(temp, Calc(expression.Substring(i + 1, 2)));
+                                i += 2;
+                                break;
+                            default:
+                                temp = Subtraction(temp, Calc(expression[i + 1]));
+                                i++;
+                                break;
+                        }
+
+                        break;
+                    case 'A':
+                    case 'B':
+                    case 'C':
+                    case 'D':
+                        temp = Calc(c);
+                        break;
                 }
             }
 
