@@ -22,8 +22,7 @@ namespace DZ_3
 
         private static void Main(string[] args)
         {
-            CreateArrayList();
-
+            FillArrayList(Text);
 
             Console.WriteLine("This is A:");
             foreach (var c in A) Console.WriteLine(c);
@@ -56,6 +55,36 @@ namespace DZ_3
             return Temp;
         }
 
+        public static void FillArrayList(string text)
+        {
+            var textArr = text.Split(';');
+            int startIndex;
+            for (int i = 0; i < 4; i++)
+            {
+                var tempStrArr = textArr[i].Split('=');
+                startIndex = tempStrArr[1].IndexOf('{');
+                var values = tempStrArr[1].Substring(startIndex + 1, tempStrArr[1].Length - startIndex - 2);
+                var arr = values.Replace(",","").ToCharArray();
+
+                switch (tempStrArr[0][0])
+                {
+                    case 'A':
+                        A = new List<char>(arr);
+                        break;
+                    case 'B':
+                        B = new List<char>(arr);
+                        break;
+                    case 'C':
+                        C = new List<char>(arr);
+                        break;
+                    case 'D':
+                        D = new List<char>(arr);
+                        break;
+                }
+            }
+            startIndex = textArr[4].IndexOf('{');
+            X = Calc(textArr[4].Substring(startIndex + 1, textArr[4].Length - startIndex - 2));
+        }
         public static void CreateArrayList()
         {
             var vrm = 0;
@@ -110,6 +139,7 @@ namespace DZ_3
 
             Console.WriteLine("This is U:");
             foreach (var c in U) Console.WriteLine(c);
+
             var subStr = "";
             var read = false;
             for (var i = vrm; i < TextLength; i++)
