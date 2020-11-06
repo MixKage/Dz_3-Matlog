@@ -12,21 +12,41 @@ namespace DZ_3
     {
         //\u2229-Пересечение
         //\u22C3-Объединение
-        public static string TEXT = "A={b,e,f,k,t};B={f,i,j,p,y};C={j,k,l,y};D={i,j,s,t,u,y,z};X={(A\u2229C)\u22C3(-B\u2229C)}";
+        public static string Text = "A={b,e,f,k,t};B={f,i,j,p,y};C={j,k,l,y};D={i,j,s,t,u,y,z};X={(A\u2229C)\u22C3(-B\u2229C)}";
         public static List<char> A = new List<char>();
         public static List<char> B = new List<char>();
         public static List<char> C = new List<char>();
         public static List<char> D = new List<char>();
         public static List<char> U = new List<char>();
-        public static List<char> Temp = new List<char>();
-        public static List<char> UR_1 = new List<char>();
-        public static List<char> UR_2 = new List<char>();
-        static int TEXTLength = TEXT.Length;
+        public static List<char> X = new List<char>();
+        static readonly int TextLength = Text.Length;
 
 
         static void Main(string[] args)
         {
             CreateArrayList();
+
+
+            Console.WriteLine("This is A:");
+            foreach (var c in A)
+            {
+                Console.WriteLine(c);
+            }
+            Console.WriteLine("This is B:");
+            foreach (var c in B)
+            {
+                Console.WriteLine(c);
+            }
+            Console.WriteLine("This is C:");
+            foreach (var c in C)
+            {
+                Console.WriteLine(c);
+            }
+            Console.WriteLine("This is D:");
+            foreach (var c in D)
+            {
+                Console.WriteLine(c);
+            }
         }
 
         public static List<char> Union(List<char> list1, List<char> list2)
@@ -51,15 +71,14 @@ namespace DZ_3
         public static void UR1(int vrm)
         {
             bool TF = false;
-            char A2;
-            for (int L1 = vrm; L1 < TEXTLength; L1++)
+            for (int L1 = vrm; L1 < TextLength; L1++)
             {
                 if (!TF)
                 {
-                    if ((TEXT[L1] == 'A') || (TEXT[L1] == 'B') || (TEXT[L1] == 'C') || (TEXT[L1] == 'D'))
+                    if ((Text[L1] == 'A') || (Text[L1] == 'B') || (Text[L1] == 'C') || (Text[L1] == 'D'))
                     {
                         List<char> A1 = new List<char>();
-                        switch (TEXT[L1])
+                        switch (Text[L1])
                         {
                             case 'A':
                                 A1 = A;
@@ -75,7 +94,7 @@ namespace DZ_3
                                 break;
                         }
                         TF = true;
-                        if (TEXT[L1 - 1] == '-')
+                        if (Text[L1 - 1] == '-')
                         {
                             Negation(A1);
                         }
@@ -94,244 +113,221 @@ namespace DZ_3
 
         public static void CreateArrayList()
         {
-            bool TF = false;
             int vrm = 0;
             bool vUR = false;
 
-            for (int L1 = 0; L1 < TEXTLength; L1++)
+            bool exitFlag;
+            for (int i = 0; i < TextLength; i++)
             {
-                if (TEXT[L1] == 'A')
+                List<char> temp = new List<char>();
+                switch (Text[i])
                 {
-                    TF = false;
-                    for (int count_1 = L1 + 1; count_1 < TEXTLength; count_1++)
-                    {
-                        if (TF == false)
-                        {
-                            if (TEXT[count_1] == '=')
-                            {
-                                continue;
-                            }
-                            else if (TEXT[count_1] == ',')
-                            {
-                                continue;
-                            }
-                            else if (TEXT[count_1] == '{')
-                            {
-                                continue;
-                            }
-                            else if (TEXT[count_1] == '}')
-                            {
-                                TF = true;
-                                L1 = count_1;
-                            }
-                            else
-                            {
-                                A.Add(TEXT[count_1]);
-                            }
-                        }
-                        else
-                        {
-                            TF = false;
-                            break;
-                        }
-                    }
-                }
-                else if (TEXT[L1] == 'B')
-                {
-                    TF = false;
-                    for (int count_1 = L1 + 1; count_1 < TEXTLength; count_1++)
-                    {
-                        if (TF == false)
-                        {
-                            if (TEXT[count_1] == '=')
-                            {
-                                continue;
-                            }
-                            else if (TEXT[count_1] == ',')
-                            {
-                                continue;
-                            }
-                            else if (TEXT[count_1] == '{')
-                            {
-                                continue;
-                            }
-                            else if (TEXT[count_1] == '}')
-                            {
-                                TF = true;
-                                L1 = count_1;
-                            }
-                            else
-                            {
-                                B.Add(TEXT[count_1]);
-                            }
-                        }
-                        else
-                        {
-                            TF = false;
-                            break;
-                        }
-                    }
-                }
-                else if (TEXT[L1] == 'C')
-                {
-                    TF = false;
-                    for (int count_1 = L1 + 1; count_1 < TEXTLength; count_1++)
-                    {
-                        if (TF == false)
-                        {
-                            if (TEXT[count_1] == '=')
-                            {
-                                continue;
-                            }
-                            else if (TEXT[count_1] == ',')
-                            {
-                                continue;
-                            }
-                            else if (TEXT[count_1] == '{')
-                            {
-                                continue;
-                            }
-                            else if (TEXT[count_1] == '}')
-                            {
-                                TF = true;
-                                L1 = count_1;
-                            }
-                            else
-                            {
-                                C.Add(TEXT[count_1]);
-                            }
-                        }
-                        else
-                        {
-                            TF = false;
-                            break;
-                        }
-                    }
-                }
-                else if (TEXT[L1] == 'D')
-                {
-                    TF = false;
-                    for (int count_1 = L1 + 1; count_1 < TEXTLength; count_1++)
-                    {
-                        if (TF == false)
-                        {
-                            if (TEXT[count_1] == '=')
-                            {
-                                continue;
-                            }
-                            else if (TEXT[count_1] == ',')
-                            {
-                                continue;
-                            }
-                            else if (TEXT[count_1] == '{')
-                            {
-                                continue;
-                            }
-                            else if (TEXT[count_1] == '}')
-                            {
-                                TF = true;
-                                L1 = count_1;
-                            }
-                            else
-                            {
-                                D.Add(TEXT[count_1]);
-                            }
-                        }
-                        else
-                        {
-                            TF = false;
-                            break;
-                        }
-                    }
+                    case 'A':
+                        temp = A;
+                        break;
+                    case 'B':
+                        temp = B;
+                        break;
+                    case 'C':
+                        temp = C;
+                        break;
+                    case 'D':
+                        temp = D;
+                        break;
+                    case 'X':
+                        vrm = i;
+                        i = TextLength;
+                        break;
                 }
 
-                else if (TEXT[L1] == 'X')
+                exitFlag = false;
+                for (int j = i + 1; j < TextLength; j++)
                 {
-                    vrm = L1;
-                    break;
+                    if (!exitFlag)
+                    {
+                        switch (Text[j])
+                        {
+                            case '=':
+                            case ',':
+                            case '{':
+                            case '}':
+                                continue;
+                            case ';':
+                                i = j;
+                                exitFlag = true;
+                                break;
+                            default:
+                                temp.Add(Text[j]);
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
 
             U = Union(Union(A, B), Union(C, D));
 
-            UR_1.Clear();
-            UR_2.Clear();
             Console.WriteLine("This is U:");
-            for (int i = 0; i < U.Count; i++)
+            foreach (var c in U)
             {
-                Console.WriteLine(U[i]);
+                Console.WriteLine(c);
             }
             Console.WriteLine("This is C:");
-            for (int i = 0; i < C.Count; i++)
+            foreach (var c in C)
             {
-                Console.WriteLine(C[i]);
+                Console.WriteLine(c);
             }
-            var NegativeC = Negation(C);
+            var negativeC = Negation(C);
             Console.WriteLine("This is -C:");
-            foreach (var t in NegativeC)
+            foreach (var t in negativeC)
             {
                 Console.WriteLine(t);
             }
-            //string ur1;
-            //string ur2;
-            TF = false;
 
-
-            for (int L2 = vrm; L2 < TEXTLength; L2++)
+            string subStr = "";
+            bool read = false;
+            for (int i = vrm; i < TextLength; i++)
             {
-                if (TF == false)
+                if (Text[i] == '{')
                 {
-                    if (TEXT[L2] == 'X')
+                    read = true;
+                    continue;
+                }
+                else if (Text[i] == '}')
+                {
+                    read = false;
+                    break;
+                }
+
+                if (read)
+                {
+                    subStr += Text[i];
+                }
+            }
+
+            Console.WriteLine("This is D\u22C3C:");
+            var res = Union(D,C);
+            foreach (var c in res)
+            {
+                Console.WriteLine(c);
+            }
+            Console.WriteLine("This is D\u22C3C:");
+            res = Calc("(D\u22C3C)");
+            foreach (var c in res)
+            {
+                Console.WriteLine(c);
+            }
+            Calc(subStr);
+
+            exitFlag = false;
+            for (int i = vrm; i < TextLength; i++)
+            {
+                if (!exitFlag)
+                {
+                    if (Text[i] == 'X')
                     {
-                        TF = true;
+                        exitFlag = true;
                     }
                 }
                 else
                 {
-                    if (TEXT[L2] == '=')
+                    switch (Text[i])
                     {
-                        continue;
-                    }
-                    else if (TEXT[L2] == '{')
-                    {
-                        continue;
-                    }
-                    else if (TEXT[L2] == '(')
-                    {
-                        if (vUR == false)
-                        {
+                        case '=':
+                        case '{':
+                            continue;
+                        case '(' when vUR == false:
                             vUR = true;
-                            vrm = L2;
+                            vrm = i;
                             UR1(vrm);
-                        }
-                        else
-                        {
+                            break;
+                        case '(':
                             //UR_2(vrm);
-                        }
+                            break;
                     }
                 }
             }
 
-            Console.WriteLine("This is A:");
-            for (int i = 0; i < A.Count; i++)
+        }
+
+        private static List<char> Calc(string expression)
+        {
+            List<char> temp = new List<char>();
+
+            for (var i = 0; i < expression.Length; i++)
             {
-                Console.WriteLine(A[i]);
+                var c = expression[i];
+                if (c == '-')
+                {
+                    if (expression[i + 1] == '(')
+                    {
+                        string tempExpression = "";
+                        i++;
+                        while (expression[i] != ')')
+                        {
+                            tempExpression += expression[i];
+                            i++;
+                        }
+                        temp = Negation(Calc(tempExpression));
+
+                    }
+                    else
+                    {
+                        temp = Negation(Calc(expression[i + 1]));
+                    }
+                }
+                else if (c == '(')
+                {
+                    string tempExpression = "";
+                    i++;
+                    while (expression[i] != ')')
+                    {
+                        tempExpression += expression[i];
+                        i++;
+                    }
+                    temp = Calc(tempExpression);
+                }
+                else if (c == '\u22C3')
+                {
+                    temp = Union(temp, Calc(expression[i + 1]));
+                    i++;
+                }
+                else if (c == 'A' || c == 'B' || c == 'C' || c == 'D')
+                {
+                    temp = Calc(c);
+                }
+
             }
-            Console.WriteLine("This is B:");
-            for (int i = 0; i < B.Count; i++)
+
+            return temp;
+        }
+
+        private static List<char> Calc(char expression)
+        {
+            List<char> temp = new List<char>();
+            switch (expression)
             {
-                Console.WriteLine(B[i]);
+                case 'A':
+                    temp = A;
+                    break;
+                case 'B':
+                    temp = B;
+                    break;
+                case 'C':
+                    temp = C;
+                    break;
+                case 'D':
+                    temp = D;
+                    break;
+                case 'X':
+                    temp = X;
+                    break;
             }
-            Console.WriteLine("This is C:");
-            for (int i = 0; i < C.Count; i++)
-            {
-                Console.WriteLine(C[i]);
-            }
-            Console.WriteLine("This is D:");
-            for (int i = 0; i < D.Count; i++)
-            {
-                Console.WriteLine(D[i]);
-            }
+
+            return temp;
         }
     }
 }
