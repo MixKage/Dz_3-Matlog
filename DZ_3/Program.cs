@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace DZ_3
@@ -21,22 +22,56 @@ namespace DZ_3
 
         private static void Main(string[] args)
         {
-            FillArrayList(Text);
+            Console.WriteLine("'v' - Объединение");
+            Console.WriteLine("'^' - Пересечение");
+            Console.WriteLine("'-' - Отрицание");
+            Console.WriteLine("'\\' - Вычитание");
+            Console.WriteLine($"\nПример: '{Text}'");
+            while (true)
+            {
+                Console.Write("Enter text> ");
+                var text = "";
+                do
+                {
+                    text += Console.ReadLine();
 
-            Console.WriteLine("This is A:");
-            foreach (var c in A) Console.WriteLine(c);
-            Console.WriteLine("This is B:");
-            foreach (var c in B) Console.WriteLine(c);
-            Console.WriteLine("This is C:");
-            foreach (var c in C) Console.WriteLine(c);
-            Console.WriteLine("This is D:");
-            foreach (var c in D) Console.WriteLine(c);
-            Console.WriteLine("This is U:");
-            foreach (var c in U) Console.WriteLine(c);
-            Console.WriteLine("\nThis is X:");
-            foreach (var c in X) Console.WriteLine(c);
-            Console.WriteLine("\nThis is Y:");
-            foreach (var c in Y) Console.WriteLine(c);
+                } while (!text.Contains('Y') || !text.Contains('X') || !text.Contains('A') || !text.Contains('B') || !text.Contains('C') || !text.Contains('D'));
+
+                text = text.Replace(" ", "").Replace("\n", "");
+
+                try
+                {
+                    FillArrayList(text);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"** Error {e} **");
+                    continue;
+                }
+
+                //Console.WriteLine("This is A:");
+                //foreach (var c in A) Console.WriteLine(c);
+                //Console.WriteLine("This is B:");
+                //foreach (var c in B) Console.WriteLine(c);
+                //Console.WriteLine("This is C:");
+                //foreach (var c in C) Console.WriteLine(c);
+                //Console.WriteLine("This is D:");
+                //foreach (var c in D) Console.WriteLine(c);
+                //Console.WriteLine("This is U:");
+                //foreach (var c in U) Console.WriteLine(c);
+
+                var str = "";
+                foreach (var c in X) str += $"{c}, ";
+                str = str.Remove(str.Length - 2, 2);
+
+                Console.Write($"\nThis is X = ({str})");
+
+                str = "";
+                foreach (var c in Y) str += $"{c}, ";
+                str = str.Remove(str.Length - 2, 2);
+                Console.Write($"\nThis is Y = ({str})");
+                Console.Write("\n\n");
+            }
         }
 
         public static List<char> Union(List<char> list1, List<char> list2)
@@ -121,32 +156,32 @@ namespace DZ_3
                 switch (c)
                 {
                     case '-' when expression[i + 1] == '(':
-                    {
-                        var tempExpression = GetExpression(expression, ref i);
+                        {
+                            var tempExpression = GetExpression(expression, ref i);
 
-                        temp = Negation(Calc(tempExpression));
-                        break;
-                    }
+                            temp = Negation(Calc(tempExpression));
+                            break;
+                        }
                     case '-':
                         temp = Negation(Calc(expression[i + 1]));
                         i++;
                         break;
                     case '(':
-                    {
-                        var tempExpression = GetExpression(expression, ref i);
-                        temp = Calc(tempExpression);
-                        break;
-                    }
+                        {
+                            var tempExpression = GetExpression(expression, ref i);
+                            temp = Calc(tempExpression);
+                            break;
+                        }
                     case '^':
                         switch (expression[i + 1])
                         {
                             case '(':
-                            {
-                                i++;
-                                var tempExpression = GetExpression(expression, ref i);
-                                temp = Crossing(temp, Calc(tempExpression));
-                                break;
-                            }
+                                {
+                                    i++;
+                                    var tempExpression = GetExpression(expression, ref i);
+                                    temp = Crossing(temp, Calc(tempExpression));
+                                    break;
+                                }
                             case '-':
                                 temp = Crossing(temp, Calc(expression.Substring(i + 1, 2)));
                                 i += 2;
@@ -162,15 +197,15 @@ namespace DZ_3
                         switch (expression[i + 1])
                         {
                             case '(':
-                            {
-                                i++;
-                                var tempExpression = GetExpression(expression, ref i);
-                                temp = Union(temp, Calc(tempExpression));
-                                break;
-                            }
+                                {
+                                    i++;
+                                    var tempExpression = GetExpression(expression, ref i);
+                                    temp = Union(temp, Calc(tempExpression));
+                                    break;
+                                }
                             case '-':
-                                temp = Union(temp, Calc(expression.Substring(i+1,2)));
-                                i+=2;
+                                temp = Union(temp, Calc(expression.Substring(i + 1, 2)));
+                                i += 2;
                                 break;
                             default:
                                 temp = Union(temp, Calc(expression[i + 1]));
@@ -183,12 +218,12 @@ namespace DZ_3
                         switch (expression[i + 1])
                         {
                             case '(':
-                            {
-                                i++;
-                                var tempExpression = GetExpression(expression, ref i);
-                                temp = Subtraction(temp, Calc(tempExpression));
-                                break;
-                            }
+                                {
+                                    i++;
+                                    var tempExpression = GetExpression(expression, ref i);
+                                    temp = Subtraction(temp, Calc(tempExpression));
+                                    break;
+                                }
                             case '-':
                                 temp = Subtraction(temp, Calc(expression.Substring(i + 1, 2)));
                                 i += 2;
