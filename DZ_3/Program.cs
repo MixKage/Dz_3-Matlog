@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NStack;
+using Terminal.Gui;
 
 namespace DZ_3
 {
@@ -22,20 +24,131 @@ namespace DZ_3
 
         private static void Main(string[] args)
         {
-            Console.WriteLine("'v' - Объединение");
-            Console.WriteLine("'^' - Пересечение");
-            Console.WriteLine("'-' - Отрицание");
-            Console.WriteLine("'\\' - Вычитание");
-            Console.WriteLine($"\nПример: '{Text}'");
-            while (true)
+            Application.Init();
+            var top = Application.Top;
+            // Creates the top-level window to show
+            var win = new Window("DZ_3")
             {
-                Console.Write("Enter text> ");
-                var text = "";
-                do
-                {
-                    text += Console.ReadLine();
+                X = 0,
+                Y = 0, // Leave one row for the toplevel menu
 
-                } while (!text.Contains('Y') || !text.Contains('X') || !text.Contains('A') || !text.Contains('B') || !text.Contains('C') || !text.Contains('D'));
+                // By using Dim.Fill(), it will automatically resize without manual intervention
+                Width = Dim.Fill(),
+                Height = Dim.Fill()
+            };
+
+            top.Add(win);
+
+            var frameView = new FrameView("How to")
+            {
+                X = 1,
+                Y = 1,
+                Width = Dim.Fill() - 1,
+                Height = 6
+
+            };
+
+            frameView.Add(
+                new Label(1, 0, "'v' - Объединение"),
+                new Label(1, 1, "'^' - Пересечение"),
+                new Label(1, 2, "'-' - Отрицание"),
+                new Label(1, 3, "'\\' - Вычитание")
+                );
+
+            var aLabel = new Label("A:")
+            {
+                X = 1,
+                Y = Pos.Bottom(frameView) + 1
+            };
+            var aText = new TextField("b,e,f,k,t")
+            {
+                X = Pos.Right(aLabel),
+                Y = Pos.Top(aLabel),
+                Width = 19
+            };
+
+            var bLabel = new Label("B:")
+            {
+                X = 1,
+                Y = Pos.Bottom(aLabel) + 1
+            };
+            var bText = new TextField("f,i,j,p,y")
+            {
+                X = Pos.Right(bLabel),
+                Y = Pos.Top(bLabel),
+                Width = Dim.Width(aText)
+            };
+
+            var cLabel = new Label("С:")
+            {
+                X = 1,
+                Y = Pos.Bottom(bLabel) + 1
+            };
+            var cText = new TextField("j,k,l,y")
+            {
+                X = Pos.Right(cLabel),
+                Y = Pos.Top(cLabel),
+                Width = Dim.Width(aText)
+            };
+
+            var dLabel = new Label("D:")
+            {
+                X = 1,
+                Y = Pos.Bottom(cLabel) + 1
+            };
+            var dText = new TextField("i,j,s,t,u,y,z")
+            {
+                X = Pos.Right(dLabel),
+                Y = Pos.Top(dLabel),
+                Width = Dim.Width(aText)
+            };
+
+            // Add some controls, 
+            win.Add(
+                // The ones with my favorite layout system, Computed
+                frameView,
+                aLabel,
+                aText,
+                bLabel,
+                bText,
+                cLabel,
+                cText,
+                dLabel,
+                dText
+            );
+
+            var xLabel = new Label("X:")
+            {
+                X = 1,
+                Y = Pos.Bottom(dLabel) + 2
+            };
+            var xText = new TextField("(A^C)v(B^C)")
+            {
+                X = Pos.Right(xLabel),
+                Y = Pos.Top(xLabel),
+                Width = Dim.Width(aText)
+            };
+
+            var yLabel = new Label("Y:")
+            {
+                X = 1,
+                Y = Pos.Bottom(xLabel) + 1
+            };
+            var yText = new TextField("(A^-B)v(D\\C)")
+            {
+                X = Pos.Right(yLabel),
+                Y = Pos.Top(yLabel),
+                Width = Dim.Width(aText)
+            };
+            var button = new Button("Calc!")
+            {
+                HotKey = Key.AltMask | Key.ControlC,
+                X = 1,
+                Y = Pos.Bottom(yLabel) + 1
+            };
+            button.Clicked += () =>
+            {
+                var text = $"A={aText.Text};B={bText.Text};C={cText.Text};D={dText.Text};X={xText.Text};Y={yText.Text}";
 
                 text = text.Replace(" ", "").Replace("\n", "");
 
@@ -45,34 +158,32 @@ namespace DZ_3
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"** Error {e} **");
-                    continue;
+                    MessageBox.Query(60, 10, "Error", $"{e.Message}\n{e.Source}", "Ok");
+                    return;
                 }
 
-                //Console.WriteLine("This is A:");
-                //foreach (var c in A) Console.WriteLine(c);
-                //Console.WriteLine("This is B:");
-                //foreach (var c in B) Console.WriteLine(c);
-                //Console.WriteLine("This is C:");
-                //foreach (var c in C) Console.WriteLine(c);
-                //Console.WriteLine("This is D:");
-                //foreach (var c in D) Console.WriteLine(c);
-                //Console.WriteLine("This is U:");
-                //foreach (var c in U) Console.WriteLine(c);
 
-                var str = "";
-                foreach (var c in X) str += $"{c}, ";
-                str = str.Remove(str.Length - 2, 2);
+                var strX = "";
+                foreach (var c in X) strX += $"{c}, ";
+                strX = strX.Remove(strX.Length - 2, 2);
 
-                Console.Write($"\nThis is X = ({str})");
+                var strY = "";
+                foreach (var c in Y) strY += $"{c}, ";
+                strY = strY.Remove(strY.Length - 2, 2);
 
-                str = "";
-                foreach (var c in Y) str += $"{c}, ";
-                str = str.Remove(str.Length - 2, 2);
-                Console.Write($"\nThis is Y = ({str})");
-                Console.Write("\n\n");
-            }
+                MessageBox.Query(60, 6, "Result", $"X = ({strX})\nY = ({strY})", "Ok");
+            };
+
+            win.Add(
+                xLabel,
+                xText,
+                yLabel,
+                yText,
+                button
+            );
+            Application.Run();
         }
+
 
         public static List<char> Union(List<char> list1, List<char> list2)
         {
@@ -105,13 +216,10 @@ namespace DZ_3
         public static void FillArrayList(string text)
         {
             var textArr = text.Split(';');
-            int startIndex;
             for (var i = 0; i < 4; i++)
             {
                 var tempStrArr = textArr[i].Split('=');
-                startIndex = tempStrArr[1].IndexOf('{');
-                var values = tempStrArr[1].Substring(startIndex + 1, tempStrArr[1].Length - startIndex - 2);
-                var arr = values.Replace(",", "").ToCharArray();
+                var arr = tempStrArr[1].Replace(",", "").ToCharArray();
 
                 switch (tempStrArr[0][0])
                 {
@@ -137,12 +245,10 @@ namespace DZ_3
             U = Union(Union(A, B), Union(C, D));
             U.Sort();
 
-            startIndex = textArr[4].IndexOf('{');
-            X = Calc(textArr[4].Substring(startIndex + 1, textArr[4].Length - startIndex - 2));
+            X = Calc(textArr[4]);
             X.Sort();
 
-            startIndex = textArr[5].IndexOf('{');
-            Y = Calc(textArr[5].Substring(startIndex + 1, textArr[5].Length - startIndex - 2));
+            Y = Calc(textArr[5]);
             Y.Sort();
         }
 
