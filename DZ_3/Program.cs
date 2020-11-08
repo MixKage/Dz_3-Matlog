@@ -303,7 +303,7 @@ namespace DZ_3
                         }
 
                         break;
-                    case 'v':
+                    case 'V':
                         switch (expression[i + 1])
                         {
                             case '(':
