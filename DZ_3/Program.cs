@@ -148,7 +148,7 @@ namespace DZ_3
             };
             button.Clicked += () =>
             {
-                var text = $"A={aText.Text};B={bText.Text};C={cText.Text};D={dText.Text};X={xText.Text};Y={yText.Text}";
+                var text = $"A={aText.Text};B={bText.Text};C={cText.Text};D={dText.Text};X={xText.Text.ToUpper()};Y={yText.Text.ToUpper()}";
 
                 text = text.Replace(" ", "").Replace("\n", "");
 
