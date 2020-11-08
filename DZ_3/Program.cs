@@ -249,10 +249,10 @@ namespace DZ_3
             U = Union(Union(A, B), Union(C, D));
             U.Sort();
 
-            X = Calc(textArr[4]);
+            X = Calc(textArr[4].Split('=')[1]);
             X.Sort();
 
-            Y = Calc(textArr[5]);
+            Y = Calc(textArr[5].Split('=')[1]);
             Y.Sort();
         }
 
