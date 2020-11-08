@@ -155,23 +155,27 @@ namespace DZ_3
                 try
                 {
                     FillArrayList(text);
+                    
+                    var strX = "";
+                    foreach (var c in X) strX += $"{c}, ";
+                    if (!string.IsNullOrEmpty(strX))
+                    {
+                        strX = strX.Remove(strX.Length - 2, 2);
+                    }
+                    var strY = "";
+                    foreach (var c in Y) strY += $"{c}, ";
+                    if (!string.IsNullOrEmpty(strY))
+                    {
+                        strY = strY.Remove(strY.Length - 2, 2);
+                    }
+                    MessageBox.Query(60, 6, "Result", $"X = ({strX})\nY = ({strY})", "Ok");
                 }
                 catch (Exception e)
                 {
                     MessageBox.Query(60, 10, "Error", $"{e.Message}\n{e.Source}", "Ok");
                     return;
                 }
-
-
-                var strX = "";
-                foreach (var c in X) strX += $"{c}, ";
-                strX = strX.Remove(strX.Length - 2, 2);
-
-                var strY = "";
-                foreach (var c in Y) strY += $"{c}, ";
-                strY = strY.Remove(strY.Length - 2, 2);
-
-                MessageBox.Query(60, 6, "Result", $"X = ({strX})\nY = ({strY})", "Ok");
+               
             };
 
             win.Add(
