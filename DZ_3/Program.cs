@@ -1,6 +1,8 @@
 ﻿using System;
 using System.CodeDom;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -201,9 +203,18 @@ namespace DZ_3
                     MessageBox.Query(60, 10, "Error", $"{e.Message}\n{e.Source}", "Ok");
                     return;
                 }
-
-                fileMeneger.StringSave($"A = {{{ aText.Text}}}; B = {{{ bText.Text}}}; C = {{{ cText.Text}}}; D = {{{ dText.Text}}};");
-                fileMeneger.StringSave($"X = { xText.Text.ToUpper().ToString().Replace('^', '\u2229').Replace('V', '\u2228')};");
+                string[] row = new string[4];
+                row[0] = aText.Text.ToString();
+                row[1] = aText.Text.ToString();
+                row[2] = aText.Text.ToString();
+                row[3] = aText.Text.ToString();
+                for (int i = 0; i < 4; i++)
+                {
+                    row[i] = string.Join<char>(", ", row[i]) + ",";
+                    row[i] = row[i].Remove(row[i].Length - 1);
+                }
+                fileMeneger.StringSave($"A = {{{row[0]}}}; B = {{{row[1]}}}; C = {{{row[2]}}}; D = {{{row[3]}}};");
+                fileMeneger.StringSave($"X = { xText.Text.ToUpper().ToString().Replace('^', '\u2229').Replace('V', '\u222A')};");
                 string tempX = xText.Text.ToUpper().ToString();
                 string resX = "";
                 while (tempX.IndexOf('(') != -1)
@@ -217,7 +228,10 @@ namespace DZ_3
                     {
                         strX = strX.Remove(strX.Length - 2, 2);
                     }
-                    resX += $"{scope} = {{{strX}}};\n";
+                    if (strX.Length == 0)
+                        resX += $"{scope} = \u2205;\n";
+                    else
+                        resX += $"{scope} = {{{strX}}};\n";
                     if (indexStop != tempX.Length)
                         tempX = tempX.Substring(indexStop + 1);
                     else
@@ -227,23 +241,26 @@ namespace DZ_3
                 }
                 //
                 string strX2 = "";
-                    foreach (var c in X) strX2 += $"{c}, ";
-                    if (!string.IsNullOrEmpty(strX2))
-                    {
-                        strX2 = strX2.Remove(strX2.Length - 2, 2);
-                    }
+                foreach (var c in X) strX2 += $"{c}, ";
+                if (!string.IsNullOrEmpty(strX2))
+                {
+                    strX2 = strX2.Remove(strX2.Length - 2, 2);
+                }
                 string strY2 = "";
-                    foreach (var c in Y) strY2 += $"{c}, ";
-                    if (!string.IsNullOrEmpty(strY2))
-                    {
-                        strY2 = strY2.Remove(strY2.Length - 2, 2);
-                    }
+                foreach (var c in Y) strY2 += $"{c}, ";
+                if (!string.IsNullOrEmpty(strY2))
+                {
+                    strY2 = strY2.Remove(strY2.Length - 2, 2);
+                }
                 //
-                resX += $"X = { xText.Text.ToUpper()} = {{{strX2}}};";
+                if(strX2.Length==0)
+                    resX += $"X = { xText.Text.ToUpper()} = \u2205;";
+                else
+                    resX += $"X = { xText.Text.ToUpper()} = {{{strX2}}};";
                 resX = resX.Replace('^', '\u2229').Replace('V', '\u2228');
                 fileMeneger.StringSave(resX);
 
-                fileMeneger.StringSave($"\nY = { yText.Text.ToUpper().ToString().Replace('^', '\u2229').Replace('V', '\u2228')};");
+                fileMeneger.StringSave($"\nY = { yText.Text.ToUpper().ToString().Replace('^', '\u2229').Replace('V', '\u222A')};");
                 string tempY = yText.Text.ToUpper().ToString();
                 string resY = "";
                 while (tempY.IndexOf('(') != -1)
@@ -257,7 +274,10 @@ namespace DZ_3
                     {
                         strY = strY.Remove(strY.Length - 2, 2);
                     }
-                    resY += $"{scope} = {{{strY}}};\n";
+                    if (strY.Length == 0)
+                        resY += $"{scope} = \u2205;\n";
+                    else
+                        resY += $"{scope} = {{{strY}}};\n";
                     if (indexStop != tempY.Length)
                         tempY = tempY.Substring(indexStop + 1);
                     else
@@ -265,8 +285,11 @@ namespace DZ_3
                         tempY = "";
                     }
                 }
-                resY += $"Y = { yText.Text.ToUpper()} = {{{strY2}}};";
-                resY = resY.Replace('^', '\u2229').Replace('V', '\u2228');
+                if(strY2.Length==0)
+                    resY += $"Y = { yText.Text.ToUpper()} = \u2205;";
+                else
+                    resY += $"Y = { yText.Text.ToUpper()} = {{{strY2}}};";
+                resY = resY.Replace('^', '\u2229').Replace('V', '\u222A');
                 fileMeneger.StringSave(resY);
 
                 var Mes = MessageBox.Query(60, 6, "Success", $"Data add to File: \"{Directory.GetCurrentDirectory()}\\Answer.txt\"!", "Ok!");
