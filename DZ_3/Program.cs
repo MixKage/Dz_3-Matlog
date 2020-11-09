@@ -208,9 +208,9 @@ namespace DZ_3
                 }
                 string[] row = new string[4];
                 row[0] = aText.Text.ToString();
-                row[1] = aText.Text.ToString();
-                row[2] = aText.Text.ToString();
-                row[3] = aText.Text.ToString();
+                row[1] = bText.Text.ToString();
+                row[2] = cText.Text.ToString();
+                row[3] = dText.Text.ToString();
                 for (int i = 0; i < 4; i++)
                 {
                     row[i] = string.Join<char>(", ", row[i]) + ",";
@@ -260,7 +260,7 @@ namespace DZ_3
                     resX += $"X = { xText.Text.ToUpper()} = \u2205;";
                 else
                     resX += $"X = { xText.Text.ToUpper()} = {{{strX2}}};";
-                resX = resX.Replace('^', '\u2229').Replace('V', '\u2228');
+                resX = resX.Replace('^', '\u2229').Replace('V', '\u222A');
                 fileMeneger.StringSave(resX);
 
                 fileMeneger.StringSave($"\nY = { yText.Text.ToUpper().ToString().Replace('^', '\u2229').Replace('V', '\u222A')};");
