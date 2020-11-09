@@ -1,10 +1,12 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using NStack;
 using Terminal.Gui;
-
+//Программа должна создать файл и выводить туда информацию (чему ровняется числовые ряды и раскрыть скобки (показать чему они будут равны) что-то типа по действиям)
 namespace DZ_3
 {
     internal class Program
@@ -155,7 +157,7 @@ namespace DZ_3
                 try
                 {
                     FillArrayList(text);
-                    
+
                     var strX = "";
                     foreach (var c in X) strX += $"{c}, ";
                     if (!string.IsNullOrEmpty(strX))
@@ -175,15 +177,108 @@ namespace DZ_3
                     MessageBox.Query(60, 10, "Error", $"{e.Message}\n{e.Source}", "Ok");
                     return;
                 }
-               
+
+            };
+            var button2 = new Button("Save!")
+            {
+                HotKey = Key.AltMask | Key.ControlC,
+                X = Pos.Right(button) + 1,
+                Y = Pos.Bottom(yLabel) + 1
             };
 
+            button2.Clicked += () =>
+            {
+                FileMeneger fileMeneger = new FileMeneger();
+
+                var text = $"A={aText.Text};B={bText.Text};C={cText.Text};D={dText.Text};X={xText.Text.ToUpper()};Y={yText.Text.ToUpper()}";
+                text = text.Replace(" ", "").Replace("\n", "");
+                try
+                {
+                    FillArrayList(text);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Query(60, 10, "Error", $"{e.Message}\n{e.Source}", "Ok");
+                    return;
+                }
+
+                fileMeneger.StringSave($"A = {{{ aText.Text}}}; B = {{{ bText.Text}}}; C = {{{ cText.Text}}}; D = {{{ dText.Text}}};");
+                fileMeneger.StringSave($"X = { xText.Text.ToUpper().ToString().Replace('^', '\u2229').Replace('V', '\u2228')};");
+                string tempX = xText.Text.ToUpper().ToString();
+                string resX = "";
+                while (tempX.IndexOf('(') != -1)
+                {
+                    int indexStart = tempX.IndexOf('(');
+                    int indexStop = tempX.IndexOf(')') + 1;
+                    string scope = tempX.Substring(indexStart, indexStop);
+                    var strX = "";
+                    foreach (var c in Calc(scope)) strX += $"{c}, ";
+                    if (!string.IsNullOrEmpty(strX))
+                    {
+                        strX = strX.Remove(strX.Length - 2, 2);
+                    }
+                    resX += $"{scope} = {{{strX}}}\n";
+                    if (indexStop != tempX.Length)
+                        tempX = tempX.Substring(indexStop + 1);
+                    else
+                    {
+                        tempX = "";
+                    }
+                }
+                //
+                string strX2 = "";
+                    foreach (var c in X) strX2 += $"{c}, ";
+                    if (!string.IsNullOrEmpty(strX2))
+                    {
+                        strX2 = strX2.Remove(strX2.Length - 2, 2);
+                    }
+                string strY2 = "";
+                    foreach (var c in Y) strY2 += $"{c}, ";
+                    if (!string.IsNullOrEmpty(strY2))
+                    {
+                        strY2 = strY2.Remove(strY2.Length - 2, 2);
+                    }
+                //
+                resX += $"X = { xText.Text.ToUpper()} = {{{strX2}}};";
+                resX = resX.Replace('^', '\u2229').Replace('V', '\u2228');
+                fileMeneger.StringSave(resX);
+
+                fileMeneger.StringSave($"\nY = { yText.Text.ToUpper().ToString().Replace('^', '\u2229').Replace('V', '\u2228')};");
+                string tempY = yText.Text.ToUpper().ToString();
+                string resY = "";
+                while (tempY.IndexOf('(') != -1)
+                {
+                    int indexStart = tempY.IndexOf('(');
+                    int indexStop = tempY.IndexOf(')') + 1;
+                    string scope = tempY.Substring(indexStart, indexStop);
+                    var strY = "";
+                    foreach (var c in Calc(scope)) strY += $"{c}, ";
+                    if (!string.IsNullOrEmpty(strY))
+                    {
+                        strY = strY.Remove(strY.Length - 2, 2);
+                    }
+                    resY += $"{scope} = {{{strY}}}\n";
+                    if (indexStop != tempY.Length)
+                        tempY = tempY.Substring(indexStop + 1);
+                    else
+                    {
+                        tempY = "";
+                    }
+                }
+                resY += $"Y = { yText.Text.ToUpper()} = {{{strY2}}};";
+                resY = resY.Replace('^', '\u2229').Replace('V', '\u2228');
+                fileMeneger.StringSave(resY);
+
+                var Mes = MessageBox.Query(60, 6, "Success", $"Data add to File: \"{Directory.GetCurrentDirectory()}\\Answer.txt\"!", "Ok!");
+                fileMeneger.FileClose();
+            };
             win.Add(
                 xLabel,
                 xText,
                 yLabel,
                 yText,
-                button
+                button,
+                button2
             );
             Application.Run();
         }
@@ -361,12 +456,18 @@ namespace DZ_3
         {
             var tempExpression = "";
             i++;
-            while (expression[i] != ')')
+            try
             {
-                tempExpression += expression[i];
-                i++;
+                while (expression[i] != ')')
+                {
+                    tempExpression += expression[i];
+                    i++;
+                }
             }
-
+            catch
+            {
+                throw new Exception("Missing scope!");
+            }
             return tempExpression;
         }
 
