@@ -48,7 +48,7 @@ namespace DZ_3
                 X = 1,
                 Y = 1,
                 Width = Dim.Fill() - 1,
-                Height = 6
+                Height = 9
 
             };
 
@@ -56,7 +56,10 @@ namespace DZ_3
                 new Label(1, 0, "'v' - Объединение"),
                 new Label(1, 1, "'^' - Пересечение"),
                 new Label(1, 2, "'-' - Отрицание"),
-                new Label(1, 3, "'\\' - Вычитание")
+                new Label(1, 3, "'\\' - Вычитание"),
+                new Label(1, 4, "В множествах A,B,C,D запятые расставляются автоматически"),
+                new Label(1, 5, "В множествах X и Y обсалютно всё можно прописывать маленькими буквами"),
+                new Label(1, 6, "Calc - посчитать. Save - Сохранить в файл.")
                 );
 
             var aLabel = new Label("A:")
@@ -64,7 +67,7 @@ namespace DZ_3
                 X = 1,
                 Y = Pos.Bottom(frameView) + 1
             };
-            var aText = new TextField("b,e,f,k,t")
+            var aText = new TextField("befkt")
             {
                 X = Pos.Right(aLabel),
                 Y = Pos.Top(aLabel),
@@ -76,7 +79,7 @@ namespace DZ_3
                 X = 1,
                 Y = Pos.Bottom(aLabel) + 1
             };
-            var bText = new TextField("f,i,j,p,y")
+            var bText = new TextField("fijpy")
             {
                 X = Pos.Right(bLabel),
                 Y = Pos.Top(bLabel),
@@ -88,7 +91,7 @@ namespace DZ_3
                 X = 1,
                 Y = Pos.Bottom(bLabel) + 1
             };
-            var cText = new TextField("j,k,l,y")
+            var cText = new TextField("jkly")
             {
                 X = Pos.Right(cLabel),
                 Y = Pos.Top(cLabel),
@@ -100,7 +103,7 @@ namespace DZ_3
                 X = 1,
                 Y = Pos.Bottom(cLabel) + 1
             };
-            var dText = new TextField("i,j,s,t,u,y,z")
+            var dText = new TextField("ijstuyz")
             {
                 X = Pos.Right(dLabel),
                 Y = Pos.Top(dLabel),
@@ -183,7 +186,7 @@ namespace DZ_3
             };
             var button2 = new Button("Save!")
             {
-                HotKey = Key.AltMask | Key.ControlC,
+                HotKey = Key.AltMask | Key.ControlS,
                 X = Pos.Right(button) + 1,
                 Y = Pos.Bottom(yLabel) + 1
             };
@@ -295,6 +298,7 @@ namespace DZ_3
                 var Mes = MessageBox.Query(60, 6, "Success", $"Data add to File: \"{Directory.GetCurrentDirectory()}\\Answer.txt\"!", "Ok!");
                 fileMeneger.FileClose();
             };
+
             win.Add(
                 xLabel,
                 xText,
