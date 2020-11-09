@@ -217,7 +217,7 @@ namespace DZ_3
                     {
                         strX = strX.Remove(strX.Length - 2, 2);
                     }
-                    resX += $"{scope} = {{{strX}}}\n";
+                    resX += $"{scope} = {{{strX}}};\n";
                     if (indexStop != tempX.Length)
                         tempX = tempX.Substring(indexStop + 1);
                     else
@@ -257,7 +257,7 @@ namespace DZ_3
                     {
                         strY = strY.Remove(strY.Length - 2, 2);
                     }
-                    resY += $"{scope} = {{{strY}}}\n";
+                    resY += $"{scope} = {{{strY}}};\n";
                     if (indexStop != tempY.Length)
                         tempY = tempY.Substring(indexStop + 1);
                     else
